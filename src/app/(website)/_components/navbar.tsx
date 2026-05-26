@@ -28,7 +28,7 @@ const LandingPageNavbar = () => {
                 </Link>
             </div>
 
-            <Link href="/auth/sign-in">
+            <Link href="/sign-in">
                 <Button className="text-base flex gap-x-2">
                     <User fill='#000' />
                     Login
