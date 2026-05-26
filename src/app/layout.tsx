@@ -23,7 +23,7 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
-        <body className={`${manrope.className} bg-[#171717]`}>
+        <body className={`${manrope.className} bg-background text-foreground`}>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
