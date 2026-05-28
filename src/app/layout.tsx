@@ -1,40 +1,47 @@
-import type { Metadata } from "next";
-import { ClerkProvider } from "@clerk/nextjs";
+import type { Metadata } from "next"
+import { ClerkProvider } from "@clerk/nextjs"
+import { Manrope } from "next/font/google"
 
-import "./globals.css";
+import "./globals.css"
 
-import { Manrope } from "next/font/google";
-import { ThemeProvider } from "next-themes";
+import { ThemeProvider } from "@/providers/theme-provider"
+import { Toaster } from "sonner"
+import ReactQueryProvider from "@/providers/ReactQueryProvider"
 
 const manrope = Manrope({
   subsets: ["latin"],
-});
+})
 
 export const metadata: Metadata = {
   title: "Cliporra",
-  description: "Share Ai powered videos with your friends",
-};
+  description: "Share AI powered videos with your friends",
+}
 
 export default function RootLayout({
   children,
-}: Readonly<{
+}: {
   children: React.ReactNode
-}>) {
+}) {
   return (
-    <ClerkProvider>
-      <html lang="en" suppressHydrationWarning>
-        <body className={`${manrope.className} bg-background text-foreground`}>
+    <html lang="en" suppressHydrationWarning>
+      <body
+        className={`${manrope.className} bg-background text-foreground`}
+      >
+        <ClerkProvider>
           <ThemeProvider
             attribute="class"
             defaultTheme="dark"
-            enableSystem
+            forcedTheme="dark"
+            enableSystem={false}
             disableTransitionOnChange
           >
+            <ReactQueryProvider>
             {children}
+            </ReactQueryProvider>
+            <Toaster richColors position="top-right" />
           </ThemeProvider>
-          </body>
-      </html>
-    </ClerkProvider>
+        </ClerkProvider>
+      </body>
+    </html>
   )
 }
- 
