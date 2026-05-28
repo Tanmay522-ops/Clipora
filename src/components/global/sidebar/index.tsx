@@ -28,6 +28,9 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
         router.push(`/dashboard/${value}`)
     }
 
+    const currentWorkspace = workspace?.workspace.find(
+        (workspace) => workspace.id === activeWorkspaceId
+    )
     return (
         <div className="bg-[#111111] flex-none relative p-4 h-full w-[250px] flex flex-col gap-4 items-center overflow-hidden">
             <div className="bg-[#111111] p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0">
@@ -78,6 +81,9 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                     </SelectGroup>
                 </SelectContent>
             </Select>
+            { currentWorkspace?.type === "PUBLIC" && 
+            workspace.subscription?.plan === "PRO" && (
+           
             <Modal
                 trigger={
                     <span className="text-sm cursor-pointer flex items-center justify-center bg-neutral-800/90 hover:bg-neutral-800/60 w-full rounded-sm p-[5px] gap-2">
@@ -95,6 +101,8 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
             >
                 <Search workspaceId={activeWorkspaceId}/>
             </Modal>
+                )}
+                <p></p>
         </div>
     )
 }
