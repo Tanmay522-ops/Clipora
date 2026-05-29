@@ -1,5 +1,10 @@
-import { FileDuoToneBlack } from '@/icons/FileDuoToneBlack';
-import { Home, Bell, CreditCard, Settings } from 'lucide-react'
+import { BillingIcon } from '@/icons/BillingIcon';
+import {NotificationsIcon} from '@/icons/NotificationIcon';
+import { SettingsIcon } from '@/icons/SettingIcon';
+import { HomeIcon } from '@/icons/HomeIcon';
+import { LibraryIcon } from '@/icons/LiberaryIcon';
+
+
 
 
 export const MENU_ITEMS = (
@@ -8,26 +13,26 @@ export const MENU_ITEMS = (
         {
             title: 'Home',
             href: `/dashboard/${workspaceId}/home`,
-            icon: <Home />,
+            icon: <HomeIcon/>,
         },
         {
             title: 'My Library',
             href: `/dashboard/${workspaceId}`,
-            icon: <FileDuoToneBlack />,
+            icon: <LibraryIcon />,
         },
         {
             title: 'Notifications',
             href: `/dashboard/${workspaceId}/notifications`,
-            icon: <Bell />,
+            icon: <NotificationsIcon />,
         },
         {
             title: 'Billing',
             href: `/dashboard/${workspaceId}/billing`,
-            icon: <CreditCard />,
+            icon: <BillingIcon />,
         },
         {
             title: 'Settings',
             href: `/dashboard/${workspaceId}/settings`,
-            icon: <Settings />,
+            icon: <SettingsIcon />,
         },
     ]

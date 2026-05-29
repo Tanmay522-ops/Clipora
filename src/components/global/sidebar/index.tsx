@@ -6,10 +6,16 @@ import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigg
 import { Separator } from "@/components/ui/separator"
 import { getWorkSpaces } from "@/actions/workspace"
 import { userQueryData } from "@/hooks/useQueryData"
-import { WorkspaceProps } from "@/types/index.type"
+import { NotificationProps, WorkspaceProps } from "@/types/index.type"
 import Modal from "../modal"
 import { PlusCircle } from "lucide-react"
 import Search from "../search"
+import { MENU_ITEMS } from "@/constants"
+import SidebarItem from "./sidebar-item"
+import { usePathname } from "next/navigation"
+import { getNotifications } from "@/actions/user"
+import WorkspacePlaceholder from "./workspace-placeholder"
+
 
 type Props = {   
      activeWorkspaceId: string
@@ -18,11 +24,17 @@ type Props = {
 const Sidebar = ({ activeWorkspaceId }: Props) => {
 
     const router = useRouter()
+    const pathName = usePathname()
 
 
     const {data,isFetched} = userQueryData(['user-workspaces'], getWorkSpaces)
 
+    const menuItems = MENU_ITEMS(activeWorkspaceId)
+
+    const{data: notifications} = userQueryData(['user-notifications'], getNotifications)
+
     const {data: workspace} = data as WorkspaceProps
+   const { data : count} = notifications as NotificationProps
 
     const onChangeActiveWorkspace = (value: string) => {
         router.push(`/dashboard/${value}`)
@@ -102,7 +114,72 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                 <Search workspaceId={activeWorkspaceId}/>
             </Modal>
                 )}
-                <p></p>
+            <p className="w-full text-[#9D9D9D] font-bold mt-4">Menu</p>
+            <nav className="w-full">
+                 <ul>
+                    {menuItems.map((item) => (
+                        <SidebarItem
+                            key={item.href}
+                            icon={item.icon}
+                            title={item.title}
+                            href={item.href}
+                            selected={pathName === item.href}
+                            notifications={item.title === "Notifications" &&
+                                count._count &&
+                                count._count.notification ||
+                                0
+                            }
+                        />
+                    ))}
+                 </ul>
+            </nav>
+            {/* OWNED WORKSPACES */}
+            <Separator className="w-4/5" />
+            <p className="w-full text-[#9D9D9D] font-bold mt-4">Workspaces</p>
+            
+                    {workspace.workspace.length === 1 && workspace.members.length === 0 && (
+                        <div className="w-full mt-[-10px]">
+                            <p className="text-[#3c3c3c] font-medium text-sm">
+                                {workspace.subscription?.plan === 'FREE'
+                                    ? 'Upgrade to create workspaces'
+                                    : 'No Workspaces'}
+                            </p>
+                        </div>
+                    )}
+                    
+            <nav className="w-full">
+                <ul className="h-[150px] overflow-auto overflow-x-hidden fade-layer">
+                    {workspace.workspace.length > 0 &&
+                        workspace.workspace.map((item) => 
+                            item.type !== "PERSONAL" && (
+                            <SidebarItem
+                                href={`/dashboard/${item.id}`}
+                                selected={pathName === `/dashboard/${item.id}`}
+                                title={item.name}
+                                notifications={0}
+                                key={item.name}
+                                icon={<WorkspacePlaceholder>{item.name.charAt(0)}</WorkspacePlaceholder>}
+                            />
+                            )
+                        )}
+                    {workspace.members.length > 0 &&
+                        workspace.members.map((item) => (
+                            <SidebarItem
+                                href={`/dashboard/${item.Workspace.id}`}
+                                selected={pathName === `/dashboard/${item.Workspace.id}`}
+                                title={item.Workspace.name}
+                                notifications={0}
+                                key={item.Workspace.name}
+                                icon={<WorkspacePlaceholder>{item.Workspace.name.charAt(0)}</WorkspacePlaceholder>}
+                            />
+                        ))}
+                </ul> 
+            </nav>
+
+            <Separator className="w-4/5" />
+            {workspace.subscription?.plan === 'FREE' && (
+                <></>
+            )}
         </div>
     )
 }
