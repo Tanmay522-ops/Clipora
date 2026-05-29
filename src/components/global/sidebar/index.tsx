@@ -5,7 +5,7 @@ import {Select, SelectContent, SelectGroup, SelectItem, SelectLabel, SelectTrigg
 
 import { Separator } from "@/components/ui/separator"
 import { getWorkSpaces } from "@/actions/workspace"
-import { userQueryData } from "@/hooks/useQueryData"
+import { useQueryData } from "@/hooks/useQueryData"
 import { NotificationProps, WorkspaceProps } from "@/types/index.type"
 import Modal from "../modal"
 import { Menu, PlusCircle } from "lucide-react"
@@ -33,11 +33,11 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
     const pathName = usePathname()
 
 
-    const {data,isFetched} = userQueryData(['user-workspaces'], getWorkSpaces)
+    const {data,isFetched} = useQueryData(['user-workspaces'], getWorkSpaces)
 
     const menuItems = MENU_ITEMS(activeWorkspaceId)
 
-    const{data: notifications} = userQueryData(['user-notifications'], getNotifications)
+    const{data: notifications} = useQueryData(['user-notifications'], getNotifications)
 
     const {data: workspace} = data as WorkspaceProps
    const { data : count} = notifications as NotificationProps
