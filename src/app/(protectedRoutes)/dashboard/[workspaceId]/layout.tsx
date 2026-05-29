@@ -1,6 +1,7 @@
 import { getNotifications, onAuthenticateUser } from "@/actions/user"
 import { getAllUserVideos, getWorkspaceFolders, getWorkSpaces, verifyAccessToWorkspace } from "@/actions/workspace"
 import { redirect } from "next/navigation"
+import GlobalHeader from "@/components/global/global-header"
 
 import { dehydrate, HydrationBoundary, QueryClient } from "@tanstack/react-query"
 import Sidebar from "@/components/global/sidebar"
@@ -54,7 +55,11 @@ const Layout = async ({ params, children }: Props) => {  // ✅ don't destructur
        <HydrationBoundary state={dehydrate(query)}>
         <div className="flex h-screen w-screen">
                 <Sidebar activeWorkspaceId={workspaceId} />
-                hi
+                <div className="w-full pt-28 p-6 overflow-y-scroll overflow-x-hidden">
+                    <GlobalHeader workspace={hasAccess.data.workspace}/>
+                    <div className="mt-4">{children}</div>
+                </div>
+
         </div>
 
        </HydrationBoundary>

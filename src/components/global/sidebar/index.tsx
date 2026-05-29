@@ -8,13 +8,19 @@ import { getWorkSpaces } from "@/actions/workspace"
 import { userQueryData } from "@/hooks/useQueryData"
 import { NotificationProps, WorkspaceProps } from "@/types/index.type"
 import Modal from "../modal"
-import { PlusCircle } from "lucide-react"
+import { Menu, PlusCircle } from "lucide-react"
 import Search from "../search"
 import { MENU_ITEMS } from "@/constants"
 import SidebarItem from "./sidebar-item"
 import { usePathname } from "next/navigation"
 import { getNotifications } from "@/actions/user"
 import WorkspacePlaceholder from "./workspace-placeholder"
+import GlobalCard from "../global-card"
+import { Button } from "@/components/ui/button"
+import Loader from "../loader"
+import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/sheet'
+import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
+import InfoBar from "../Info-Bar"
 
 
 type Props = {   
@@ -43,7 +49,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
     const currentWorkspace = workspace?.workspace.find(
         (workspace) => workspace.id === activeWorkspaceId
     )
-    return (
+ const SidebarSection =  (
         <div className="bg-[#111111] flex-none relative p-4 h-full w-[250px] flex flex-col gap-4 items-center overflow-hidden">
             <div className="bg-[#111111] p-4 flex gap-2 justify-center items-center mb-4 absolute top-0 left-0 right-0">
                 <Image
@@ -146,7 +152,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                             </p>
                         </div>
                     )}
-                    
+
             <nav className="w-full">
                 <ul className="h-[150px] overflow-auto overflow-x-hidden fade-layer">
                     {workspace.workspace.length > 0 &&
@@ -178,10 +184,51 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
 
             <Separator className="w-4/5" />
             {workspace.subscription?.plan === 'FREE' && (
-                <></>
+                <GlobalCard
+                    title="Upgrade to Pro"
+                    description="Unlock AI features like transcription, AI summary, and more."
+                    footer={
+                        <Button className="text-sm w-full">
+                            <Loader loading={false}>Upgrade</Loader>
+                        </Button>
+                    }
+                />
             )}
         </div>
     )
+    return (
+        <div className="full">
+            {/* //INFOBAR */}
+            <InfoBar/>
+            {/* //Sheet mobile and desktop */}
+            <div className="md:hidden fixed my-4">
+                <Sheet>
+                    <SheetTrigger
+                        asChild
+                        className="ml-2"
+                    >
+                        <Button
+                            variant={'ghost'}
+                            className="mt-[-2px]"
+                        >
+                            <Menu />
+                        </Button>
+                    </SheetTrigger>
+                    <SheetContent
+                        side={'left'}
+                        className="p-0 w-fit h-full border-none"
+                    >
+                        <VisuallyHidden>
+                            <SheetTitle>Navigation Menu</SheetTitle>
+                        </VisuallyHidden>
+                        {SidebarSection}
+                    </SheetContent>
+                </Sheet>
+            </div>
+            <div className="md:block hidden h-full">{SidebarSection}</div>
+        </div>
+    )
+
 }
 
 export default Sidebar
