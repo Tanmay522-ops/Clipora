@@ -4,13 +4,11 @@ import { dehydrate, HydrationBoundary, QueryClient } from '@tanstack/react-query
 import React from 'react'
 
 type Props = {
-    params: {
-        folderId: string
-        workspaceId: string
-    }
+    params: Promise<{ workspaceId: string, folderId: string }>
 }
 
-const page = async ({ params: { folderId, workspaceId } }: Props) => {
+const page = async ({ params}: Props) => {
+    const { folderId , workspaceId } = await params
     const query = new QueryClient()
 
     await query.prefetchQuery({
