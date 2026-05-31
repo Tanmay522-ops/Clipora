@@ -240,6 +240,9 @@ export const renameFolders = async (folderId: string, name: string) => {
 
 
 
+
+
+
 export const createFolder = async (workspaceId: string) => {
     try {
         const isNewFolder = await client.workSpace.update({
@@ -262,3 +265,27 @@ export const createFolder = async (workspaceId: string) => {
 }
 
 
+
+export const getFolderInfo = async (folderId: string) => {
+    try {
+        const folderInfo = await client.folder.findUnique({
+            where: {
+                id: folderId,
+            },  
+            select: {
+                name: true,
+                _count: {
+                    select: {
+                        videos: true,
+                    },
+                },
+            },
+        })
+        if(folderInfo) {
+            return { status: 200, data: folderInfo }
+        }
+        return { status: 400, data: null}
+    } catch (error) {
+        return { status: 500, data: 'Error fetching folder info' }
+    }
+}
