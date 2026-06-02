@@ -58,7 +58,7 @@ const Folders = ({workspaceId}: Props) => {
               
                 className={cn(
                     status !== 200 && "justify-center",
-                    "flex items-center gap-4 flex-wrap w-full"
+                    "flex items-center gap-4 overflow-x-auto w-full scrollbar-hide"
                 )}
             >
                 {status !== 200 ? (
