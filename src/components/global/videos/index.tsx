@@ -15,29 +15,15 @@ type Props = {
     workspaceId: string
 }
 
-const video =  {
-    User: {
-      firstname: 'John',
-      lastname: 'Doe',
-      image: 'https://example.com/profile-image.jpg',
-    },
-    id: 'video123',
-    processing: false,
-    Folder: {
-      id: 'folder456',
-      name: 'Marketing Videos',
-    },
-    createdAt: new Date('2023-04-15T10:30:00Z'),
-    title: 'Product Demo: New Features',
-    source: 'https://example.com/videos/product-demo.mp4',
-  }
-
-
 const Videos = ({ folderId, videosKey, workspaceId }: Props) => {
     const { data: videoData } = useQueryData(
         [videosKey],
-        () => getAllUserVideos(folderId)
+        () => getAllUserVideos( folderId)
     )
+
+    console.log('videoData:', videoData)  // ← add this
+    console.log('folderId:', folderId)  
+    console.log('workspaceId:', workspaceId)  
 
     const { status: videosStatus, data: videos } = videoData as VideosProps
 
@@ -56,13 +42,15 @@ const Videos = ({ folderId, videosKey, workspaceId }: Props) => {
                         : 'grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5'
                 )}
             >
-                {/* {videosStatus === 200 ? (
-                    videos.map((video) => <VideoCard />)
+                {videosStatus === 200 ? (
+                    videos.map((video) =>
+                <VideoCard 
+                    key={video.id}
+                    workspaceId={workspaceId} 
+                    {...video} />)
                 ) : (
                     <p className="text-[#BDBDBD]">No videos in workspace</p>
-                )} */}
-
-                <VideoCard workspaceId={workspaceId} {...video}/>
+                )}
             </section>
         </div>
     )

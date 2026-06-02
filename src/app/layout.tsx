@@ -7,6 +7,7 @@ import "./globals.css"
 import { ThemeProvider } from "@/providers/theme-provider"
 import { Toaster } from "sonner"
 import ReactQueryProvider from "@/providers/ReactQueryProvider"
+import { ReduxProvider } from "@/redux/provider"
 
 const manrope = Manrope({
   subsets: ["latin"],
@@ -35,9 +36,11 @@ export default function RootLayout({
             enableSystem={false}
             disableTransitionOnChange
           >
+            <ReduxProvider>
             <ReactQueryProvider>
             {children}
             </ReactQueryProvider>
+            </ReduxProvider>
             <Toaster richColors position="top-right" />
           </ThemeProvider>
         </ClerkProvider>

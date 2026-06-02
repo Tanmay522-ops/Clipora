@@ -6,6 +6,8 @@ import Folder from './folder'
 import { useQueryData } from '@/hooks/useQueryData'
 import { getWorkspaceFolders } from '@/actions/workspace'
 import { useMutationDataState } from '@/hooks/useMutationData'
+import { useDispatch } from 'react-redux'
+import { FOLDERS } from '@/redux/slices/folders'
 
 type Props = {
     workspaceId: string
@@ -28,6 +30,7 @@ export type FoldersProps = {
 const Folders = ({workspaceId}: Props) => {
     //get folders
     const {data,isFetched} = useQueryData(["workspace-folders"],() => getWorkspaceFolders(workspaceId))
+    const dispatch = useDispatch()
 
     //optimistic variable
 
@@ -35,6 +38,9 @@ const Folders = ({workspaceId}: Props) => {
 
     const {status, data: folders} = data as FoldersProps
 
+    if(isFetched && folders) {
+        dispatch(FOLDERS({folders: folders}))
+    }
 
     return (
         <div className="flex flex-col gap-4">

@@ -24,8 +24,8 @@ const CardMenu = ({
             trigger={
                 <Move
                     size={20}
-                    fill="#a4a4a4"
-                    className="text-[#a4a4a4]"
+                    fill="#4f4f4f"
+                    className="text-[#4f4f4f]"
                 />
             }
         >

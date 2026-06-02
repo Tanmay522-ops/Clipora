@@ -75,14 +75,14 @@ export const getWorkspaceFolders = async (workspaceId: string) => {
 }
 
 
-export const getAllUserVideos = async (workSpaceId: string) => {
+export const getAllUserVideos = async (workspaceId: string) => {
     try {
         const user = await currentUser()
         if (!user) return { status: 404 }
 
         const videos = await client.video.findMany({
             where: {
-                OR: [{ workSpaceId }, { folderId: workSpaceId }],
+                OR: [{ workspaceId }, { folderId: workspaceId }],
             },
             select: {
                 id: true,
@@ -110,12 +110,14 @@ export const getAllUserVideos = async (workSpaceId: string) => {
         })
 
         if (videos && videos.length > 0) {
+            console.log("VIDEOS:", videos)
             return { status: 200, data: videos }
         }
 
         return { status: 404 }
 
     } catch (error) {
+            console.error("getAllUserVideos ERROR:", error)
         return { status: 400 }
     }
 }
@@ -289,3 +291,28 @@ export const getFolderInfo = async (folderId: string) => {
         return { status: 500, data: 'Error fetching folder info' }
     }
 }
+
+
+export const moveVideoLocation = async (
+    videoId: string,
+    workSpaceId: string,
+    folderId: string
+) => {
+    try {
+        const location = await client.video.update({
+            where: {
+                id: videoId,
+            },
+            data: {
+                folderId: folderId || null,
+                workSpaceId,
+            },
+        })
+        if (location) return { status: 200, data: 'folder changed successfully' }
+        return { status: 404, data: 'workspace/folder not found' }
+    } catch (error) {
+        return { status: 500, data: 'Oops! something went wrong' }
+    }
+}
+
+

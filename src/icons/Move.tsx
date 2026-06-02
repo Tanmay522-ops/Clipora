@@ -1,4 +1,4 @@
-const Move = ({ size = 24, fill = '#a4a4a4', className = '' }) => {
+const Move = ({ size = 24, fill = '#a4a4a4', className = '', ...props }) => {
   return (
     <svg
       width={size}
@@ -7,6 +7,7 @@ const Move = ({ size = 24, fill = '#a4a4a4', className = '' }) => {
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
       className={className}
+      {...props}  // ← add this
     >
       <rect
         x="3"
