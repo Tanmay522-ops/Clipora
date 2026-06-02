@@ -1,7 +1,8 @@
 import CreateFolders from '@/components/global/create-folders'
 import CreateWorkspace from '@/components/global/create-workspace'
 import Folders from '@/components/global/folders'
-import Videos from '@/components/global/videos/videos'
+import Videos from '@/components/global/videos'
+
 
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 
@@ -42,7 +43,7 @@ const Page = async ({ params }: Props) => {
         <section className="py-9">
           <TabsContent value="videos">
             <Folders workspaceId={workspaceId}/>
-            <Videos workspaceId={workspaceId}/>
+            <Videos workspaceId={workspaceId} videosKey="workspace-videos" />
           </TabsContent>
         </section>
       </Tabs>

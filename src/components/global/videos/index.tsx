@@ -10,7 +10,7 @@ import VideoCard from './Video-Card'
 
 
 type Props = {
-    folderId: string
+    folderId?: string
     videosKey: string
     workspaceId: string
 }
@@ -18,17 +18,19 @@ type Props = {
 const Videos = ({ folderId, videosKey, workspaceId }: Props) => {
     const { data: videoData } = useQueryData(
         [videosKey],
-        () => getAllUserVideos( folderId)
+        () => getAllUserVideos( folderId ?? workspaceId)
     )
+    
+    
 
     console.log('videoData:', videoData)  // ← add this
     console.log('folderId:', folderId)  
     console.log('workspaceId:', workspaceId)  
 
-    const { status: videosStatus, data: videos } = videoData as VideosProps
+    const { status: videosStatus, data: videos } = (videoData as VideosProps) ?? { status: 404, data: [] }
 
     return (
-        <div className="flex flex-col gap-4 mt-4">
+        <div className="flex flex-col gap-4 mt-8">
             <div className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                     <VideoRecorderDuotone/>

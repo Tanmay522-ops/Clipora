@@ -1,5 +1,5 @@
-import { QueryClient } from "@tanstack/react-query"
-
+import { getPreviewVideo } from "@/actions/workspace"
+import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
 type Props = {
     params: Promise<{ videoId: string }>  // ← Next.js 15 params is a Promise
 }
@@ -13,7 +13,11 @@ const VideoPage = async ({ params }: Props) => {
         queryFn: () => getPreviewVideo(videoId),
     })
 
-    return <div>VideoPage</div>
+    return (
+        <HydrationBoundary state={dehydrate(query)}>
+            <VideoPreview />
+        </HydrationBoundary>
+    )
 }
 
 export default VideoPage
