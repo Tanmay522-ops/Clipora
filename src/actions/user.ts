@@ -2,12 +2,12 @@
 
 import { client } from '@/lib/prisma'
 
-import { currentUser,auth } from '@clerk/nextjs/server'
+import { currentUser, auth } from '@clerk/nextjs/server'
 
 export const onAuthenticateUser = async () => {
   try {
 
-    const { userId } = await auth()  
+    const { userId } = await auth()
 
     if (!userId) {
       console.log("NO SESSION FOUND")
@@ -70,7 +70,7 @@ export const onAuthenticateUser = async () => {
     return { status: 400 }
 
   } catch (error) {
-    console.error("onAuthenticateUser ERROR:", error) 
+    console.error("onAuthenticateUser ERROR:", error)
     return { status: 500 }
   }
 }
@@ -78,40 +78,40 @@ export const onAuthenticateUser = async () => {
 
 
 export const getNotifications = async () => {
-    try {
-        const user = await currentUser()
-        if (!user) return { status: 404 }
+  try {
+    const user = await currentUser()
+    if (!user) return { status: 404 }
 
-        const notifications = await client.user.findUnique({
-            where: {
-                clerkid: user.id,
-            },
-            select: {
-                notification: {
-                    select: {
-                        id: true,
-                        content: true,
-                        userId: true,
-                    },
-                },
-                _count: {
-                    select: {
-                        notification: true,  
-                    },
-                },
-            },
-        })
+    const notifications = await client.user.findUnique({
+      where: {
+        clerkid: user.id,
+      },
+      select: {
+        notification: {
+          select: {
+            id: true,
+            content: true,
+            userId: true,
+          },
+        },
+        _count: {
+          select: {
+            notification: true,
+          },
+        },
+      },
+    })
 
-        if (notifications && notifications.notification.length > 0) {
-            return { status: 200, data: notifications }
-        }
-
-        return { status: 404, data: [] }
-
-    } catch (error) {
-        console.error("getNotifications ERROR:", error)
-        return { status: 400, data: [] }
+    if (notifications && notifications.notification.length > 0) {
+      return { status: 200, data: notifications }
     }
+
+    return { status: 404, data: [] }
+
+  } catch (error) {
+    console.error("getNotifications ERROR:", error)
+    return { status: 400, data: [] }
+  }
 }
 
 
@@ -176,6 +176,52 @@ export const getPaymentInfo = async () => {
     }
   } catch (error) {
     console.error("Error in getting paymentInfo")
+    return { status: 400 }
+  }
+}
+
+
+export const getFirstView = async () => {
+  try {
+    const user = await currentUser()
+    if (!user) return { status: 404 }
+    const userData = await client.user.findUnique({
+      where: {
+        clerkid: user.id,
+      },
+      select: {
+        firstView: true,
+      },
+    })
+    if (userData) {
+      return { status: 200, data: userData.firstView }
+    }
+    return { status: 400, data: false }
+  } catch (error) {
+    return { status: 400 }
+  }
+}
+
+
+export const enableFirstView = async (state: boolean) => {
+  try {
+    const user = await currentUser()
+
+    if (!user) return { status: 404 }
+
+    const view = await client.user.update({
+      where: {
+        clerkid: user.id,
+      },
+      data: {
+        firstView: state,
+      },
+    })
+
+    if (view) {
+      return { status: 200, data: 'Setting updated' }
+    }
+  } catch (error) {
     return { status: 400 }
   }
 }
