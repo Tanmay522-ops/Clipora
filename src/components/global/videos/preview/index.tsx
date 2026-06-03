@@ -11,6 +11,7 @@ import { Download } from 'lucide-react'
 import TabMenu from '../../Tabs'
 import AiTools from '../../ai-tools'
 import VideoTranscript from '../../video-transcript'
+import Activities from '../../activities'
 
 type Props = {
     videoId: string
@@ -111,6 +112,7 @@ const VideoPreview = ({ videoId }: Props) => {
                          plan={video.User?.subscription?.plan!}
                          />
                          <VideoTranscript transcript={video.description!} />
+                         <Activities />
                     </TabMenu>
                 </div>
             </div>
