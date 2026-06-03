@@ -29,6 +29,7 @@ model User {
   sender       Invite[]      @relation("sender")
   reciever     Invite[]      @relation("reciever")
   trial        Boolean       @default(false)
+  firstView    Boolean       @default(false)
 }
 
 model Subscription {
