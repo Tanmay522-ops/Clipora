@@ -1,11 +1,12 @@
 import { getPreviewVideo } from "@/actions/workspace"
+import VideoPreview from "@/components/global/videos/preview"
 import { HydrationBoundary, QueryClient, dehydrate } from '@tanstack/react-query'
 type Props = {
-    params: Promise<{ videoId: string }>  // ← Next.js 15 params is a Promise
+    params: Promise<{ videoId: string }>  
 }
 
 const VideoPage = async ({ params }: Props) => {
-    const { videoId } = await params        // ← await it
+    const { videoId } = await params        
     const query = new QueryClient()
 
     await query.prefetchQuery({
@@ -15,7 +16,7 @@ const VideoPage = async ({ params }: Props) => {
 
     return (
         <HydrationBoundary state={dehydrate(query)}>
-            <VideoPreview />
+            <VideoPreview videoId={videoId} />
         </HydrationBoundary>
     )
 }
