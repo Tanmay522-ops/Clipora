@@ -497,3 +497,44 @@ export const acceptInvite = async (inviteId: string) => {
     }
   }
 }
+
+
+
+
+export const completeSubscription = async (subscription_id: string) => {
+  try {
+    const user = await currentUser()
+    if (!user) return { status: 404 }
+
+    const customer = await client.user.update({
+      where: {
+        clerkid: user.id,
+      },
+      data: {
+        subscription: {
+          update: {
+            data: {
+              customerId: subscription_id, // PayPal subscription ID
+              plan: 'PRO',
+            },
+          },
+        },
+      },
+    })
+
+    if (customer) {
+      return { status: 200 }
+    }
+    return { status: 404 }
+
+  } catch (error) {
+    return { status: 400 }
+  }
+}
+
+
+
+
+
+
+

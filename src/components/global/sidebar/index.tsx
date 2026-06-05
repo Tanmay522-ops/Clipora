@@ -23,6 +23,7 @@ import { VisuallyHidden } from '@radix-ui/react-visually-hidden'
 import InfoBar from "../Info-Bar"
 import { useDispatch } from "react-redux"
 import { WORKSPACES } from "@/redux/slices/workspace"
+import PaymentButton from "../payment-button"
 
 
 type Props = {
@@ -200,9 +201,7 @@ const Sidebar = ({ activeWorkspaceId }: Props) => {
                     title="Upgrade to Pro"
                     description="Unlock AI features like transcription, AI summary, and more."
                     footer={
-                        <Button className="text-sm w-full">
-                            <Loader loading={false}>Upgrade</Loader>
-                        </Button>
+                       <PaymentButton/>
                     }
                 />
             )}
