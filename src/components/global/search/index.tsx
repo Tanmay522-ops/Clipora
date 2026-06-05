@@ -6,6 +6,8 @@ import React from 'react'
 import Loader from '../loader'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { User } from 'lucide-react'
+import { useMutationData } from '@/hooks/useMutationData'
+import { inviteMembers } from '@/actions/user'
 
 type Props = {
     workspaceId: string
@@ -17,12 +19,10 @@ const Search = ({ workspaceId }: Props) => {
         'USERS'
     )
 
-//     const { mutate, isPending } = useMutationData(
-//   ['invite-member'],
-//   (data: { recieverId: string; email: string }) => {
-
-//   }
-// )
+    const { mutate, isPending } = useMutationData(
+  ['invite-member'],
+  (data: { recieverId: string; email: string }) => inviteMembers(workspaceId, data.recieverId, data.email)
+)
 
     return (
         <div className="flex flex-col gap-y-5">
@@ -72,12 +72,17 @@ const Search = ({ workspaceId }: Props) => {
 
                             <div className="flex-1 flex justify-end items-center">
                                 <Button
-                                    onClick={() => { }}
+                                    onClick={() => 
+                                        mutate({
+                                            recieverId: user.id,
+                                            email: user.email as string
+                                        })
+                                    }
                                     variant={'default'}
                                     className="w-5/12 font-bold"
                                 >
                                     <Loader
-                                        loading={false}
+                                        loading={isPending}
                                         color="#000"
                                     >
                                         Invite
