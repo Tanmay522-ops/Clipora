@@ -1,9 +1,9 @@
 'use client'
-import { getPreviewVideo } from '@/actions/workspace'
+import { getPreviewVideo, sendEmailForFirstView } from '@/actions/workspace'
 import { useQueryData } from '@/hooks/useQueryData'
 import { VideoProps } from '@/types/index.type'
 import { useRouter } from 'next/navigation'
-import React from 'react'
+import React, { useEffect } from 'react'
 import CopyLink from '../copy-link'
 import RichLink from '../rich-link'
 import { truncateString } from '@/lib/utils'
@@ -18,17 +18,27 @@ type Props = {
 }
 
 const VideoPreview = ({ videoId }: Props) => {
-
-    // WIP Setup notify First view
-    // WIP setup Activity
-
     const router = useRouter()
+
     const { data } = useQueryData(
         ['preview-video'],
         () => getPreviewVideo(videoId)
     )
 
+
     const { data: video, status, author } = data as VideoProps
+
+    const notifyFirstView = async () => await sendEmailForFirstView(videoId)
+
+    useEffect(() => {
+        if (video.views === 0) {
+            notifyFirstView()
+        }
+        return () => {
+            notifyFirstView()
+        }
+    }, [])
+
     if (status !== 200) router.push("/")
 
     const daysAgo = Math.floor(
